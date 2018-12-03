@@ -1,0 +1,150 @@
+<html>
+
+<head>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/home.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <title>Good Housing</title>
+
+<body>
+
+    <nav class="nav nav-pills bg-primary">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="rent.html" class="nav-link">Rent</a>
+        <a href="#" class="nav-link">Status</a>
+    </nav>
+
+    <div class="container container-responsive">
+        <br>
+        <h1 id="main" class="text-center">Rent rooms available</h1>
+        <br>
+        <!-- <div class="row"> -->
+        <!-- <div class="col-sm-4"></div> -->
+        <!-- <button class="col-sm-4 btn btn-success">Login</button> -->
+        <!-- </div> -->
+        <table class="table table">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Location</th>
+                    <th scope="col">Width</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody id="content">
+
+            </tbody>
+        </table>
+
+        <form id='form'>
+            <div class="form-group">
+                <label for="location">Location</label>
+                <input type="hidden" name="_METHOD" value="PUT" />
+                <input type="hidden" class="form-control" id="id" name="id">
+                <input type="text" class="form-control" id="loc" name="loc">
+            </div>
+            <div class="form-group">
+                <label for="width">Width</label>
+                <input type="number" class="form-control" id="width">
+            </div>
+            <div class="form-group">
+                <label for="price">Price</label>
+                <input type="number" class="form-control" id="price">
+            </div>
+            <div class="form-group">
+            </div>
+        </form>
+        <button onclick="submitUpdate()" class="form-control btn btn-success">update</button>
+
+    </div>
+</body>
+<script>
+    function loadTable() {
+        var request = new XMLHttpRequest();
+        // Open a new connection, using the GET request on the URL endpoint
+        console.log("load table running!");
+        request.open('GET', 'http:/localhost:9090/goodHouse/rest/rooms/json', true);
+        request.onload = function () {
+            var rentData = JSON.parse(this.response);
+            rentData.forEach(data => {
+                console.log(data);
+                var head = document.createElement("tr");
+                var id = document.createElement("td");
+                var width = document.createElement("td");
+                var location = document.createElement("td");
+                var price = document.createElement("td");
+                // content
+                var idText = document.createTextNode(data.id);
+                var widthText = document.createTextNode(data.width);
+                var locationText = document.createTextNode(data.location);
+                var priceText = document.createTextNode(data.price);
+
+                id.appendChild(idText);
+                width.appendChild(widthText);
+                location.appendChild(locationText);
+                price.appendChild(priceText);
+                head.appendChild(id);
+                head.appendChild(location);
+                head.appendChild(width);
+
+                head.appendChild(price);
+
+                //buttons
+                var buttonTd = document.createElement("td");
+                var edit = document.createElement("button");
+                edit.className = "edit btn btn-warning";
+                // edit.value=data.id;
+                edit.setAttribute('onclick', 'loadForm(' + data.id + ')');
+                // edit.onclick = loadForm(data.id);
+
+                var hapus = document.createElement("button");
+                hapus.className = "delete btn btn-danger";
+                var editText = document.createTextNode("Edit");
+                var deleteText = document.createTextNode("Delete");
+                edit.appendChild(editText);
+                hapus.appendChild(deleteText);
+                buttonTd.appendChild(edit);
+                buttonTd.appendChild(hapus);
+                var tabel = document.getElementById("content");
+                head.appendChild(buttonTd);
+                tabel.appendChild(head);
+                console.log(head);
+
+            });
+        }
+        request.send();
+
+    }
+
+    //   console.log(edit.value);
+    function loadForm(roomId) {
+        console.log("loading form");
+        var request = new XMLHttpRequest();
+        request.open('GET', 'http:/localhost:9090/goodHouse/rest/rooms?id=' + roomId, true);
+        request.onload = function () {
+            var editRoomData = JSON.parse(this.response);
+            document.getElementById("loc").value = editRoomData.id;
+            document.getElementById("loc").value = editRoomData.location;
+            document.getElementById("width").value = editRoomData.width;
+            document.getElementById("price").value = editRoomData.price;
+        }
+        request.send();
+    }
+
+    function submitUpdate() {
+        console.log("form update");
+        var request = new XMLHttpRequest();
+        request.open('PUT', 'http:/localhost:9090/goodHouse/rest/rooms', true);
+        var formData = $('#form').serialize();
+        console.log(formData);
+        request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        request.send(formData);
+    }
+    window.onload = function () {
+        loadTable();
+    }
+</script>
+
+</html>

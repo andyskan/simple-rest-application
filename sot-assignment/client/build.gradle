@@ -1,0 +1,43 @@
+plugins {
+    id 'java'
+}
+
+group 'sot-assignment'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.10
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+//    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    compile group: 'org.glassfish.jersey.containers', name: 'jersey-container-servlet', version: '2.27'
+    compile group: 'org.glassfish.jersey.inject', name: 'jersey-hk2', version: '2.27'
+// https://mvnrepository.com/artifact/org.glassfish.jersey.bundles.repackaged/jersey-guava
+    compile group: 'org.glassfish.jersey.bundles.repackaged', name: 'jersey-guava', version: '2.26-b03'
+// https://mvnrepository.com/artifact/javax.xml.bind/jaxb-api
+    compile group: 'javax.xml.bind', name: 'jaxb-api', version: '2.4.0-b180830.0359'
+// https://mvnrepository.com/artifact/org.glassfish/javax.activation
+    compile group: 'org.glassfish', name: 'javax.activation', version: '10.0-b28'
+    // for json
+    compile group: 'com.owlike', name: 'genson', version: '1.4'
+    compile files(fileTree(dir: 'lib', includes: ['*.jar']))
+// https://mvnrepository.com/artifact/org.glassfish.jersey.media/jersey-media-json-jackson
+    compile group: 'org.glassfish.jersey.media', name: 'jersey-media-json-jackson', version: '2.27'
+
+}
+jar {
+    archiveName = 'serviceClient.jar' // name of the generated .jar file
+    manifest { // class where the main method is
+        attributes 'Main-Class': 'client'
+    }
+    // add all dependencies to the executable .jar file
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+

@@ -1,0 +1,45 @@
+<html>
+
+<head>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/home.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <title>Good Housing</title>
+
+<body>
+
+    <nav class="nav nav-pills bg-primary">
+            <div class="navbar-header">
+                    <a class="navbar-brand" href="#">GoodHousing</a>
+                  </div>
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="rent.html" class="nav-link">Rent</a>
+        <a href="#" class="nav-link">Status</a>
+    </nav>
+    <div class="container container-responsive">
+        <br>
+        <h1 id="main" class="text-center">Title</h1>
+        <br>
+        <div class="row">
+            <div class="col-sm-4"></div>
+            <button class="col-sm-4 btn btn-success">Login</button>
+        </div>
+    </div>
+</body>
+<script>
+        window.onload=function(){
+    var request = new XMLHttpRequest();
+    // Open a new connection, using the GET request on the URL endpoint
+    request.open('GET', 'http:/localhost:9090/goodHouse/rest/rooms', true);
+    request.onload = function () {
+        console.log(request.responseText);
+        console.log("meong?");
+
+        document.getElementById("main").innerHTML = request.responseText;
+    }
+    request.send();
+    }
+</script>
+
+</html>

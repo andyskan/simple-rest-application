@@ -1,0 +1,13 @@
+.nav-link{
+    color:white;
+}
+.navbar-brand{
+    color:white;
+}
+.card{
+    width:18rem;
+}
+.cardGroup{
+    display: inline-block;
+    padding-right:5px;
+}
